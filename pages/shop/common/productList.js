@@ -89,6 +89,8 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
   const [layout, setLayout] = useState(layoutList);
   const [url, setUrl] = useState();
 
+
+
   const [dataProducts, setDataProduct] = useState([])
 
   useEffect(() => {
@@ -140,7 +142,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
         discount: item[8],
         stock: item[9],
         new: item[10],
-        image: item[15]
+        image: item[11]
       }
     })
 
@@ -299,8 +301,8 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                     <div className="product-filter-content">
                       <div className="search-count">
                         <h5>
-                          {data
-                            ? `Mostrando productos 1-${data.products.items.length} de ${data.products.total}`
+                          {dataProducts
+                            ? `Mostrando productos 1-${dataProducts.length}`
                             : "loading"}{" "}
                           Resultados
                         </h5>

@@ -4,6 +4,7 @@ import CartContext from "../../../../helpers/cart";
 import { Container, Row, Col, Media, Input } from "reactstrap";
 import { CurrencyContext } from "../../../../helpers/Currency/CurrencyContext";
 import cart from "../../../../public/assets/images/icon-empty-cart.png";
+import LookBook from "../../../../public/assets/images/lookbook.jpg"
 
 const CartPage = () => {
   const context = useContext(CartContext);
@@ -70,11 +71,7 @@ const CartPage = () => {
                             <Link href={`/left-sidebar/product/` + item.id}>
                               <a>
                                 <Media
-                                  src={
-                                    item.images
-                                      ? item.images[0].src
-                                      : item.images[0].src
-                                  }
+                                  src={`${item.image ? item.image : LookBook}`}
                                   alt=""
                                 />
                               </a>

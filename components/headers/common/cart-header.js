@@ -2,16 +2,25 @@ import React, { Fragment, useContext } from "react";
 import Link from "next/link";
 import CartContext from "../../../helpers/cart";
 import { Media } from "reactstrap";
+import LookBook from "../../../public/assets/images/lookbook.jpg"
 
 const CartHeader = ({ item, symbol }) => {
   const context = useContext(CartContext);
+
+  console.log("CartHeader")
+  console.log(item)
+
   return (
     <Fragment>
       <li>
         <div className="media">
           <Link href={"/product-details/" + item.id}>
             <a>
-              <Media alt="" className="me-3" src={`${item.images[0].src}`} />
+              <Media 
+                alt="" 
+                className="me-3" 
+                src={`${item.image ? item.image : LookBook}`}
+              />
             </a>
           </Link>
           <div className="media-body">

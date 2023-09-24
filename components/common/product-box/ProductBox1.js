@@ -7,6 +7,9 @@ import { CurrencyContext } from "../../../helpers/Currency/CurrencyContext";
 import MasterProductDetail from "./MasterProductDetail";
 import axios from "axios";
 
+import LookBook from "../../../public/assets/images/lookbook.jpg"
+
+
 const ProductItem = ({
   product,
   addCart,
@@ -69,7 +72,7 @@ const ProductItem = ({
         {/* <div className="front" onClick={clickProductDetail}> */}
         <div className="front" onClick={toggle}>
           <Media
-            src={`${image ? image : product.images[0].src}`}
+            src={`${product.image ? product.image : LookBook}`}
             className="img-fluid"
             alt=""
           />
@@ -115,11 +118,7 @@ const ProductItem = ({
                 <Col lg="12">
                   <div className="media">
                     <Media
-                      src={`${
-                        product.variants && image
-                          ? image
-                          : product.images[0].src
-                      }`}
+                      src={`${product.image ? product.image : LookBook}`}
                       alt=""
                       className="img-fluid"
                     />
@@ -190,9 +189,7 @@ const ProductItem = ({
             <Col lg="6" xs="12">
               <div className="quick-view-img">
                 <Media
-                  src={`${
-                    product.variants && image ? image : product.images[0].src
-                  }`}
+                  src={`${product.image ? product.image : LookBook}`}
                   alt=""
                   className="img-fluid"
                 />

@@ -25,25 +25,25 @@ const MasterProductDetail = ({
           ""
         )} */}
         <h6>{product.title}</h6>
-        {des ? <p>{product.description}</p> : ""}
+        {product.description ? <p>{product.description}</p> : ""}
         <h4>
           {currency.symbol}
           {(
             (product.price - (product.price * product.discount) / 100) *
             currency.value
           ).toFixed(2)}
-          <del>
+          {/* <del>
             <span className="money">
               {currency.symbol}
               {(product.price * currency.value).toFixed(2)}
             </span>
-          </del>
+          </del> */}
         </h4>
 
-        {product.variants.map((vari) => {
+        {/* {product.variants.map((vari) => {
           var findItem = uniqueTags.find((x) => x.color === vari.color);
           if (!findItem) uniqueTags.push(vari);
-        })}
+        })} */}
 
         {/* {product.type === "jewellery" ||
         product.type === "nursery" ||
