@@ -12,6 +12,8 @@ import PostLoader from "../../../components/common/PostLoader";
 import CartContext from "../../../helpers/cart";
 import { WishlistContext } from "../../../helpers/wishlist/WishlistContext";
 import { CompareContext } from "../../../helpers/Compare/CompareContext";
+import axios from "axios";
+import { getData } from "../../../helpers/apiCaller";
 
 const GET_PRODUCTS = gql`
   query products(
@@ -87,6 +89,8 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
   const [layout, setLayout] = useState(layoutList);
   const [url, setUrl] = useState();
 
+  const [dataProducts, setDataProduct] = useState([])
+
   useEffect(() => {
     const pathname = window.location.pathname;
     setUrl(pathname);
@@ -107,6 +111,46 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
       limit: limit,
     },
   });
+
+  useEffect(() => {
+    getDataProducts()
+  }, [])
+
+
+
+
+  const getDataProducts = async () => {
+    console.log("Esta es la informacion de los productos")
+    let dataProducts = await getData('productos')
+
+    let dataProductsMod = dataProducts.map((item, index) => {
+      console.log(item)
+      console.log(index)
+
+
+      return {
+        id: item[0],
+        title: item[1],
+        description: item[2],
+        type: item[3],
+        brand: item[4],
+        category_id: item[5],
+        price: item[6],
+        sale: item[7],
+        discount: item[8],
+        stock: item[9],
+        new: item[10],
+        image: item[15]
+      }
+    })
+
+    console.log("======================================getDataProducts")
+    console.log(dataProducts)
+    console.log(dataProductsMod)
+
+    setDataProduct([...dataProductsMod])
+
+  }
 
   const handlePagination = () => {
     setIsLoading(true);
@@ -263,7 +307,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                       </div>
                       <div className="collection-view">
                         <ul>
-                          <li>
+                          {/* <li>
                             <i
                               className="fa fa-th grid-layout-view"
                               onClick={() => {
@@ -271,7 +315,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                                 setGrid("col-lg-3");
                               }}
                             ></i>
-                          </li>
+                          </li> */}
                           <li>
                             <i
                               className="fa fa-list-ul list-layout-view"
@@ -352,63 +396,38 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
               <div className={`product-wrapper-grid ${layout}`}>
                 <Row>
                   {/* Product Box */}
-                  {!data ||
-                    !data.products ||
-                    !data.products.items ||
-                    data.products.items.length === 0 ||
-                    loading ? (
-                    data &&
-                      data.products &&
-                      data.products.items &&
-                      data.products.items.length === 0 ? (
-                      <Col xs="12">
-                        <div>
-                          <div className="col-sm-12 empty-cart-cls text-center">
-                            <img
-                              src={`/assets/images/empty-search.jpg`}
-                              className="img-fluid mb-4 mx-auto"
-                              alt=""
-                            />
-                            <h3>
-                              <strong>Su carro está vacío</strong>
-                            </h3>
-                            {/* <h4>Explore more shortlist some items.</h4> */}
-                          </div>
-                        </div>
-                      </Col>
-                    ) : (
-                      <div className="row mx-0 margin-default mt-4">
-                        <div className="col-xl-3 col-lg-4 col-6">
-                          <PostLoader />
-                        </div>
-                        <div className="col-xl-3 col-lg-4 col-6">
-                          <PostLoader />
-                        </div>
-                        <div className="col-xl-3 col-lg-4 col-6">
-                          <PostLoader />
-                        </div>
-                        <div className="col-xl-3 col-lg-4 col-6">
-                          <PostLoader />
-                        </div>
+                  {!dataProducts ? (
+                    <div className="row mx-0 margin-default mt-4">
+                      <div className="col-xl-3 col-lg-4 col-6">
+                        <PostLoader />
                       </div>
-                    )
+                      <div className="col-xl-3 col-lg-4 col-6">
+                        <PostLoader />
+                      </div>
+                      <div className="col-xl-3 col-lg-4 col-6">
+                        <PostLoader />
+                      </div>
+                      <div className="col-xl-3 col-lg-4 col-6">
+                        <PostLoader />
+                      </div>
+                    </div>
                   ) : (
-                    data &&
-                    data.products.items.map((product, i) => (
+                    dataProducts &&
+                    dataProducts.map((product, i) => (
                       <div className={grid} key={i}>
                         <div className="product">
                           <div>
                             <ProductItem
-                              des={true}
+                              // des={true}
                               product={product}
                               symbol={symbol}
                               cartClass="cart-info cart-wrap"
-                              addCompare={() =>
-                                compareContext.addToCompare(product)
-                              }
-                              addWishlist={() =>
-                                wishlistContext.addToWish(product)
-                              }
+                              // addCompare={() =>
+                              //   compareContext.addToCompare(product)
+                              // }
+                              // addWishlist={() =>
+                              //   wishlistContext.addToWish(product)
+                              // }
                               addCart={() =>
                                 cartContext.addToCart(product, quantity)
                               }
