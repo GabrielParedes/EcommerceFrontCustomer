@@ -14,7 +14,7 @@ const CheckoutPage = () => {
   const curContext = useContext(CurrencyContext);
   const symbol = curContext.state.symbol;
   const [obj, setObj] = useState({});
-  const [payment, setPayment] = useState("cod");
+  const [payment, setPayment] = useState("efectivo");
   const { register, handleSubmit, formState: { errors } } = useForm(); // initialise the hook
   const router = useRouter();
 
@@ -120,7 +120,6 @@ const CheckoutPage = () => {
                         type="text"
                         name="address"
                         {...register("address", { required: true, min: 20, max: 120 })}
-                        placeholder="Street address"
                       />
                       <span className="error-message">
                         {errors.address && "Please right your address ."}
@@ -253,7 +252,7 @@ const CheckoutPage = () => {
                                     name="payment-group"
                                     id="payment-2"
                                     defaultChecked={true}
-                                    onClick={() => checkhandle("cod")}
+                                    onClick={() => checkhandle("efectivo")}
                                   />
                                   <label htmlFor="payment-2">Pago en efectivo</label>
                                 </div>
@@ -264,7 +263,7 @@ const CheckoutPage = () => {
                                     type="radio"
                                     name="payment-group"
                                     id="payment-1"
-                                    onClick={() => checkhandle("paypal")}
+                                    onClick={() => checkhandle("deposito")}
                                   />
                                   <label htmlFor="payment-1">
                                     Pago por depósito
@@ -279,24 +278,30 @@ const CheckoutPage = () => {
                         </div>
                         {cartTotal !== 0 ? (
                           <div className="text-end">
-                            {payment === "cod" ? (
+                            {payment === "efectivo" ? (
                               <button type="submit" className="btn-solid btn">
                                 Completar pedido
                               </button>
                             ) : (
-                              <PayPalButton
-                                amount="0.01"
-                                onSuccess={(details, data) => {
-                                  alert("Transaction completed by " + details.payer.name.given_name);
+                              <>
+                                <h6>Cuentas de banco</h6>
+                                <h5>Banco industrial XXXX-XXXXX-XXXXX</h5>
+                                <h5>Banrural XXXX-XXXXX-XXXXX</h5>
+                              </>
 
-                                  return fetch("/paypal-transaction-complete", {
-                                    method: "post",
-                                    body: JSON.stringify({
-                                      orderID: data.orderID
-                                    })
-                                  });
-                                }}
-                              />
+                              // <PayPalButton
+                              //   amount="0.01"
+                              //   onSuccess={(details, data) => {
+                              //     alert("Transaction completed by " + details.payer.name.given_name);
+
+                              //     return fetch("/paypal-transaction-complete", {
+                              //       method: "post",
+                              //       body: JSON.stringify({
+                              //         orderID: data.orderID
+                              //       })
+                              //     });
+                              //   }}
+                              // />
                             )}
                           </div>
                         ) : (

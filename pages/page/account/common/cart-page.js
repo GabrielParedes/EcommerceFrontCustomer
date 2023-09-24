@@ -5,6 +5,7 @@ import { Container, Row, Col, Media, Input } from "reactstrap";
 import { CurrencyContext } from "../../../../helpers/Currency/CurrencyContext";
 import cart from "../../../../public/assets/images/icon-empty-cart.png";
 import LookBook from "../../../../public/assets/images/lookbook.jpg"
+import { useEffect } from "react";
 
 const CartPage = () => {
   const context = useContext(CartContext);
@@ -19,12 +20,27 @@ const CartPage = () => {
 
   const handleQtyUpdate = (item, quantity) => {
     if (quantity >= 1) {
-      setQuantityError(false);
+      if (quantity > item.stock) {
+        setQuantityError(true);
+      } else {
+        setQuantityError(false);
+      }
+
       updateQty(item, quantity);
     } else {
       setQuantityError(true);
     }
   };
+
+  useEffect(() => {
+    console.log("inicio")
+    console.log(cartItems)
+    cartItems.forEach(item => {
+      if(item.qty > item.stock && !quantityError){
+        setQuantityError(true);
+      }
+    })
+  }, [])
 
   const changeQty = (e) => {
     setQuantity(parseInt(e.target.value));
@@ -64,18 +80,28 @@ const CartPage = () => {
                     </tr>
                   </thead>
                   {cartItems.map((item, index) => {
+
+                    console.log("Cart page")
+                    console.log(item)
+
                     return (
                       <tbody key={index}>
                         <tr>
                           <td>
-                            <Link href={`/left-sidebar/product/` + item.id}>
+                            <a>
+                              <Media
+                                src={`${item.image ? item.image : LookBook}`}
+                                alt=""
+                              />
+                            </a>
+                            {/* <Link href={`/left-sidebar/product/` + item.id}>
                               <a>
                                 <Media
                                   src={`${item.image ? item.image : LookBook}`}
                                   alt=""
                                 />
                               </a>
-                            </Link>
+                            </Link> */}
                           </td>
                           <td>
                             <Link href={`/left-sidebar/product/` + item.id}>
@@ -143,7 +169,7 @@ const CartPage = () => {
                                 />
                               </div>
                             </div>
-                            {item.qty >= item.stock ? "out of Stock" : ""}
+                            {item.qty > item.stock ? "out of Stock" : ""}
                           </td>
                           <td>
                             <i
@@ -183,9 +209,18 @@ const CartPage = () => {
                 </Link>
               </Col>
               <Col xs="6">
-                <Link href={`/page/account/checkout`}>
-                  <a className="btn btn-solid">Verificar</a>
-                </Link>
+                {
+                  !quantityError ? (
+                    <Link href={`/page/account/checkout`}>
+                      <a className="btn btn-solid">Verificar</a>
+                    </Link>
+                  ) : (
+                    <button className="btn btn-disabled" disabled>
+                      Verificar
+                    </button>
+                  )
+                }
+
               </Col>
             </Row>
           </Container>

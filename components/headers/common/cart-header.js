@@ -14,7 +14,14 @@ const CartHeader = ({ item, symbol }) => {
     <Fragment>
       <li>
         <div className="media">
-          <Link href={"/product-details/" + item.id}>
+          <a>
+            <Media
+              alt=""
+              className="me-3"
+              src={`${item.image ? item.image : LookBook}`}
+            />
+          </a>
+          {/* <Link href={"/product-details/" + item.id}>
             <a>
               <Media 
                 alt="" 
@@ -22,7 +29,7 @@ const CartHeader = ({ item, symbol }) => {
                 src={`${item.image ? item.image : LookBook}`}
               />
             </a>
-          </Link>
+          </Link> */}
           <div className="media-body">
             <a>
               <h6>{item.title}</h6>

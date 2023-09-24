@@ -24,7 +24,7 @@ const MasterProductDetail = ({
         ) : (
           ""
         )} */}
-        <h6>{product.title}</h6>
+        <h6>{product.title} - Talla {product.sizeProd}</h6>
         {product.description ? <p>{product.description}</p> : ""}
         <h4>
           {currency.symbol}

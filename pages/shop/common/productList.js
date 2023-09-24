@@ -142,7 +142,9 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
         discount: item[8],
         stock: item[9],
         new: item[10],
-        image: item[11]
+        image: item[11],
+        sku: item[12],
+        sizeProd: item[13],
       }
     })
 

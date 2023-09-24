@@ -28,6 +28,7 @@ const ProductItem = ({
   const currency = curContext.state;
   const plusQty = cartContext.plusQty;
   const minusQty = cartContext.minusQty;
+  const resetQuantity = cartContext.resetQuantity;
   const quantity = cartContext.quantity;
   const setQuantity = cartContext.setQuantity;
 
@@ -35,7 +36,10 @@ const ProductItem = ({
   const [modal, setModal] = useState(false);
   const [modalCompare, setModalCompare] = useState(false);
   const toggleCompare = () => setModalCompare(!modalCompare);
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal)
+    resetQuantity()
+  };
   const uniqueTags = [];
 
   const getProducts = () => {
@@ -204,12 +208,12 @@ const ProductItem = ({
                     (product.price - (product.price * product.discount) / 100) *
                     currency.value
                   ).toFixed(2)}
-                  <del>
+                  {/* <del>
                     <span className="money">
                       {currency.symbol}
                       {(product.price * currency.value).toFixed(2)}
                     </span>
-                  </del>
+                  </del> */}
                 </h3>
                 {product.variants ? (
                   <ul className="color-variant">

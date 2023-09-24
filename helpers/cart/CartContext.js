@@ -55,6 +55,10 @@ const CartProvider = (props) => {
     setCartItems(cartItems.filter((e) => e.id !== item.id));
   };
 
+  const resetQuantity = () => {
+    setQuantity(1)
+  }
+
   const minusQty = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -63,7 +67,7 @@ const CartProvider = (props) => {
   };
 
   const plusQty = (item) => {
-    if (item.stock >= quantity) {
+    if (item.stock > quantity) {
       setQuantity(quantity + 1);
     } else {
       setStock("Out of Stock !");
@@ -110,6 +114,7 @@ const CartProvider = (props) => {
         plusQty: plusQty,
         minusQty: minusQty,
         updateQty: updateQty,
+        resetQuantity: resetQuantity
       }}
     >
       {props.children}
