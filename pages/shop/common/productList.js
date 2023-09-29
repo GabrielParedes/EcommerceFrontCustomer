@@ -148,6 +148,8 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
       }
     })
 
+    dataProductsMod = dataProductsMod.filter(item => item.stock > 0)
+
     console.log("======================================getDataProducts")
     console.log(dataProducts)
     console.log(dataProductsMod)

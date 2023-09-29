@@ -4,8 +4,11 @@ import { Input, Container, Row, Form, Label, Col } from 'reactstrap';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { postData } from '../../../helpers/apiCaller';
+import { useRouter } from 'next/router';
 
 const Register = () => {
+    const router = useRouter();
+
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -14,12 +17,12 @@ const Register = () => {
     })
 
     const handleChange = (event) => {
-		const { name, value } = event.target
-		setForm({
-			...form,
-			[name]: value,
-		});
-	};
+        const { name, value } = event.target
+        setForm({
+            ...form,
+            [name]: value,
+        });
+    };
 
     const userRegister = async () => {
         console.log(form)
@@ -31,14 +34,28 @@ const Register = () => {
         }
 
 
-        // await postData('clientes', userData)
-        // .then(resp => {
-        //     toast.success("Usuario creado correctamente!");
-        //     window.location.href = '/page/account/cart';
-        // })
-        // .catch(err => {
-        //     toast.error("Hubo un error al crear usuario!");
-        // })
+        await postData('clientes', userData)
+            .then(resp => {
+                toast.success("Usuario creado correctamente!");
+
+                postData('clientes/username', form)
+                    .then(resp => {
+                        if (!resp.message) {
+                            localStorage.setItem('user', JSON.stringify({id: resp[0], name: resp[1], username: resp[2], email: resp[2]}))
+                            localStorage.setItem('isSessionActive', true)
+                            router.push('/shop/list_view');
+                        } else {
+                            Swal.fire(
+                                'Credenciales incorrectas',
+                                'Las credenciales proporcionadas son incorrectas',
+                                'error'
+                            )
+                        }
+                    })
+            })
+            .catch(err => {
+                toast.error("Hubo un error al crear usuario!");
+            })
     }
 
     return (
@@ -57,7 +74,7 @@ const Register = () => {
                                                 type="text"
                                                 className="form-control"
                                                 name="firstName"
-                                                required="" 
+                                                required=""
                                                 value={form.firstName}
                                                 onChange={(event) => handleChange(event)}
                                             />

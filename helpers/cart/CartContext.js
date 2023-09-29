@@ -28,6 +28,10 @@ const CartProvider = (props) => {
     localStorage.setItem("cartList", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const resetCart = () => {
+    setCartItems([])
+  }
+
   // Add Product To Cart
   const addToCart = (item, quantity) => {
     toast.success("Producto agregado correctamente");
@@ -109,6 +113,7 @@ const CartProvider = (props) => {
         setQuantity,
         quantity,
         stock,
+        resetCart,
         addToCart: addToCart,
         removeFromCart: removeFromCart,
         plusQty: plusQty,

@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getSessionStatus } from "../../../helpers/another";
 
 const TopBarDark = ({ topClass, fluid }) => {
   const router = useRouter();
+  const [isSessionActive, setIsSessionActive] = useState(getSessionStatus())
+
+  // useEffect(() => {
+  //   setIsSessionActive(getSessionStatus())
+  // }, [])
+
+  useEffect(() => {
+    // setIsSessionActive(getSessionStatus())
+
+    console.log('==================================asdfasdfasdfasd===================')
+    console.log(isSessionActive)
+    console.log(typeof(isSessionActive))
+  }, [getSessionStatus()])
+
+
+
   const firebaseLogout = () => {
     localStorage.setItem('user', false)
-    router.push("/page/account/login-auth");
+    localStorage.setItem('isSessionActive', false)
+    setIsSessionActive(false)
+    router.push('/shop/list_view');
   };
+
   return (
     <div className={topClass}>
       <Container fluid={fluid}>
@@ -41,19 +61,28 @@ const TopBarDark = ({ topClass, fluid }) => {
               <li className="onhover-dropdown mobile-account">
                 <i className="fa fa-user" aria-hidden="true"></i> Mi cuenta
                 <ul className="onhover-show-div">
-                  <li>
-                    <Link href={`/page/account/login`}>
-                      <a>Acceder</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/page/account/register`}>
-                      <a>Registrar</a>
-                    </Link>
-                  </li>
-                  <li onClick={() => firebaseLogout()}>
-                    <a>Cerrar sesión</a>
-                  </li>
+                  {
+                    isSessionActive == 'true' ? (
+                      <li onClick={() => firebaseLogout()}>
+                        <a>Cerrar sesión</a>
+                      </li>
+                    ) : (
+                      <>
+                        <li>
+                          <Link href={`/page/account/login`}>
+                            <a>Acceder</a>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={`/page/account/register`}>
+                            <a>Registrar</a>
+                          </Link>
+                        </li>
+                      </>
+                    )
+                  }
+
+
                 </ul>
               </li>
             </ul>

@@ -1,22 +1,42 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Media, Container, Form, Row, Col } from "reactstrap";
 import CartContext from "../../../../helpers/cart";
 import paypal from "../../../../public/assets/images/paypal.png";
 import { PayPalButton } from "react-paypal-button-v2";
-import { useForm } from "react-hook-form";
+import { get, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { CurrencyContext } from "../../../../helpers/Currency/CurrencyContext";
+import { getSessionStatus } from "../../../../helpers/another";
+import { postData } from "../../../../helpers/apiCaller";
 
 const CheckoutPage = () => {
   const cartContext = useContext(CartContext);
   const cartItems = cartContext.state;
   const cartTotal = cartContext.cartTotal;
+  const resetCart = cartContext.resetCart;
   const curContext = useContext(CurrencyContext);
   const symbol = curContext.state.symbol;
   const [obj, setObj] = useState({});
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('user')))
   const [payment, setPayment] = useState("efectivo");
   const { register, handleSubmit, formState: { errors } } = useForm(); // initialise the hook
   const router = useRouter();
+
+
+  useEffect(() => {
+    console.log("STATUS SESSION CHECKOUT")
+    console.log(getSessionStatus())
+
+    if (getSessionStatus() == 'false') {
+      router.push('/page/account/login')
+    }
+
+  }, [])
+
+  useEffect(() => {
+    console.log(userData)
+
+  }, [userData])
 
   const checkhandle = (value) => {
     setPayment(value);
@@ -24,20 +44,58 @@ const CheckoutPage = () => {
 
   const onSubmit = (data) => {
     if (data !== "") {
-      alert("You submitted the form and stuff!");
-      router.push({
-        pathname: "/page/order-success",
-        state: { items: cartItems, orderTotal: cartTotal, symbol: symbol },
-      });
+      postData('compras', {
+        name: userData.name,
+        phone: userData.phone,
+        email: userData.email,
+        address: userData.address,
+        total: cartTotal,
+        payment_type: payment == 'deposito' ? userData.voucher : payment,
+        customer_id: userData.id
+      })
+      .then(async (resp) => {
+        console.log(resp)
+        if(resp.id){
+          await cartItems.forEach(async (item) => {
+            postData('detalle_compra', {
+              product_id: item.id,
+              qty: item.qty,
+              subtotal: item.total,
+              purchase_id: resp.id
+            })
+          })
+
+          localStorage.setItem('cartComplete', JSON.stringify({ items: cartItems, orderTotal: cartTotal, symbol: symbol, address: userData.address, payment: payment, voucher: userData.voucher || '' }))
+          resetCart()
+
+          router.push({
+            pathname: "/page/order-success",
+            state: { items: cartItems, orderTotal: cartTotal, symbol: symbol },
+          });
+        }
+      })
+
+
+
+      
+
+      
     } else {
       errors.showMessages();
     }
   };
 
-  const setStateFromInput = (event) => {
-    obj[event.target.name] = event.target.value;
-    setObj(obj);
+  const handleChange = (event) => {
+    const { name, value } = event.target
+
+    console.log(name, value)
+
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
   };
+
 
   return (
     <section className="section-b-space">
@@ -55,12 +113,14 @@ const CheckoutPage = () => {
                       <div className="field-label">Nombre completo</div>
                       <input
                         type="text"
-                        className={`${errors.firstName ? "error_border" : ""}`}
-                        name="first_name"
-                        {...register('first_name', { required: true })}
+                        className={`${errors.name ? "error_border" : ""}`}
+                        name="name"
+                        {...register('name', { required: true })}
+                        value={userData.name || ''}
+                        onChange={(event) => handleChange(event)}
                       />
                       <span className="error-message">
-                        {errors.firstName && "First name is required"}
+                        {errors.name && "Este campo es requerido"}
                       </span>
                     </div>
                     {/* <div className="form-group col-md-6 col-sm-6 col-xs-12">
@@ -81,10 +141,12 @@ const CheckoutPage = () => {
                         type="text"
                         name="phone"
                         className={`${errors.phone ? "error_border" : ""}`}
-                        {...register('phone', { pattern: /\d+/ })}
+                        {...register('phone', { required: true, pattern: /\d+/ })}
+                        value={userData.phone}
+                        onChange={(event) => handleChange(event)}
                       />
                       <span className="error-message">
-                        {errors.phone && "Please enter number for phone."}
+                        {errors.phone && "Ingrese un teléfono válido"}
                       </span>
                     </div>
                     <div className="form-group col-md-6 col-sm-6 col-xs-12">
@@ -98,9 +160,11 @@ const CheckoutPage = () => {
                           required: true,
                           pattern: /^\S+@\S+$/i,
                         })}
+                        value={userData.email}
+                        onChange={(event) => handleChange(event)}
                       />
                       <span className="error-message">
-                        {errors.email && "Please enter proper email address ."}
+                        {errors.email && "Ingrese un correo válido"}
                       </span>
                     </div>
                     {/* <div className="form-group col-md-12 col-sm-12 col-xs-12">
@@ -119,10 +183,12 @@ const CheckoutPage = () => {
                         className={`${errors.address ? "error_border" : ""}`}
                         type="text"
                         name="address"
-                        {...register("address", { required: true, min: 20, max: 120 })}
+                        {...register("address", { required: true, min: 1, max: 200 })}
+                        value={userData.address}
+                        onChange={(event) => handleChange(event)}
                       />
                       <span className="error-message">
-                        {errors.address && "Please right your address ."}
+                        {errors.address && "Ingrese una direccion válida"}
                       </span>
                     </div>
                     {/* <div className="form-group col-md-12 col-sm-12 col-xs-12">
@@ -278,15 +344,27 @@ const CheckoutPage = () => {
                         </div>
                         {cartTotal !== 0 ? (
                           <div className="text-end">
-                            {payment === "efectivo" ? (
-                              <button type="submit" className="btn-solid btn">
-                                Completar pedido
-                              </button>
-                            ) : (
+                            {payment === "deposito" && (
                               <>
                                 <h6>Cuentas de banco</h6>
-                                <h5>Banco industrial XXXX-XXXXX-XXXXX</h5>
-                                <h5>Banrural XXXX-XXXXX-XXXXX</h5>
+                                <h5>Banco industrial - 1850070754</h5>
+                                <h5>Banrural - 3272026369</h5>
+
+
+                                <div className="form-group col-md-12 col-sm-12 col-xs-12">
+                                  <div className="field-label"># de boleta</div>
+                                  <input
+                                    type="text"
+                                    name="voucher"
+                                    className={`${errors.voucher ? "error_border" : ""}`}
+                                    {...register('voucher', { required: true })}
+                                    value={userData.voucher}
+                                    onChange={(event) => handleChange(event)}
+                                  />
+                                  <span className="error-message">
+                                    {errors.voucher && "Ingrese una boleta válida"}
+                                  </span>
+                                </div>
                               </>
 
                               // <PayPalButton
@@ -303,6 +381,10 @@ const CheckoutPage = () => {
                               //   }}
                               // />
                             )}
+
+                            <button type="submit" className="btn-solid btn">
+                              Completar pedido
+                            </button>
                           </div>
                         ) : (
                           ""

@@ -37,6 +37,23 @@ const getData = async (endpoint) => {
   return response
 }
 
+const getDataByParams = async (endpoint, params) => {
+  let response
+
+  if (endpoint) {
+    await axios.get(`${url}/${endpoint}`, params)
+      .then(resp => {
+        response = resp.data
+      })
+      .catch(err => {
+        throw err
+      })
+
+  }
+
+  return response
+}
+
 const postData = async (endpoint, data) => {
   let response
 
@@ -116,6 +133,7 @@ const deleteDataById = async (endpoint, id) => {
 export {
   getDataById,
   getData,
+  getDataByParams,
   postData,
   postImage,
   putDataById,

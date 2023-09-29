@@ -13,11 +13,13 @@ import { CurrencyContextProvider } from "../helpers/Currency/CurrencyContext";
 import Helmet from "react-helmet";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from '../helpers/apollo';
+import { useRouter } from "next/router";
 
 export default function MyApp({ Component, pageProps }) {
   const [isLoading, setIsLoading] = useState(true);
   const [url, setUrl] = useState();
   const apolloClient = useApollo(pageProps)
+  const router = useRouter();
 
   useEffect(() => {
     const path = window.location.pathname.split("/shop/list_view");
@@ -27,6 +29,11 @@ export default function MyApp({ Component, pageProps }) {
     let timer=setTimeout(function () {
       setIsLoading(false)
     }, 500);
+
+    if(router.asPath == '/'){
+      router.push('/shop/list_view');
+    }
+
     return () => { clearTimeout(timer)}
   }, []);
   return (
