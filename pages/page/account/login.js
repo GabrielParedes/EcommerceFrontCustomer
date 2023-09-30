@@ -10,7 +10,7 @@ import { getData, getDataByParams, postData } from '../../../helpers/apiCaller';
 const Login = () => {
     const router = useRouter();    
 
-    const [formData, setFormData] = useState({username: '', password: ''})
+    const [formData, setFormData] = useState({username: '', password: '', type: 'customer'})
 
     const login = () => {
         postData('clientes/username', formData)

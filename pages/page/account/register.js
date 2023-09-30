@@ -30,7 +30,8 @@ const Register = () => {
         let userData = {
             name: `${form.firstName} ${form.lastName}`,
             username: form.email,
-            password: form.password
+            password: form.password,
+            type: 'customer'
         }
 
 
