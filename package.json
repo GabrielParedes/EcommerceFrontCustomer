@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next -p 3001"
+    "dev": "next -p 3001",
+    "build": "next build"
   },
   "keywords": [],
   "author": "",
@@ -58,6 +59,7 @@
     "reactstrap": "^8.10.0",
     "responsive-loader": "^3.0.4",
     "rxjs-compat": "^6.6.7",
-    "sass": "^1.52.3"
+    "sass": "^1.52.3",
+    "sweetalert2": "^11.7.31"
   }
 }
