@@ -17,7 +17,7 @@ const TopBarDark = ({ topClass, fluid }) => {
 
     console.log('==================================asdfasdfasdfasd===================')
     console.log(isSessionActive)
-    console.log(typeof(isSessionActive))
+    console.log(typeof (isSessionActive))
   }, [getSessionStatus()])
 
 
@@ -38,7 +38,7 @@ const TopBarDark = ({ topClass, fluid }) => {
               <ul>
                 <li>Bienvenido a Algo Bonito</li>
                 <li>
-                  <i className="fa fa-whatsapp text-white" aria-hidden="true"></i>5986 6459 / 4217 3533
+                  <i className="fa fa-whatsapp text-white" aria-hidden="true"></i><a href="https://api.whatsapp.com/send?phone=+50259866459&text=Hola%2C%20estoy%20interesado%20en%20los%20productos%20que%20venden%20en%20la%20pagina%20de%20Algo%20Bonito.%20%0AEspero%20su%20pronta%20respuesta." target="_blank">5986 6459</a> / <a href="https://api.whatsapp.com/send?phone=+50242173533&text=Hola%2C%20estoy%20interesado%20en%20los%20productos%20que%20venden%20en%20la%20pagina%20de%20Algo%20Bonito.%20%0AEspero%20su%20pronta%20respuesta." target="_blank">4217 3533</a>
                 </li>
                 <li>
                   <i className="fa fa-instagram text-white" aria-hidden="true"></i>Algo_bonito_502
