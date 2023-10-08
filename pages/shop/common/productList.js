@@ -322,7 +322,9 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                               }}
                             ></i>
                           </li> */}
-                          <li>
+
+                          {/* EN CASO DE DESCOMENTAR LAS OPCIONES, ES SOLO ESTA */}
+                          {/* <li>
                             <i
                               className="fa fa-list-ul list-layout-view"
                               onClick={() => {
@@ -330,7 +332,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                                 setGrid("col-lg-12");
                               }}
                             ></i>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                       <div
@@ -376,7 +378,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                           </li>
                         </ul>
                       </div>
-                      <div className="product-page-per-view">
+                      {/* <div className="product-page-per-view">
                         <select
                           onChange={(e) => setLimit(parseInt(e.target.value))}
                         >
@@ -394,7 +396,7 @@ const ProductList = ({ colClass, layoutList, openSidebar, noSidebar }) => {
                           <option value="AscOrder">Ascendente</option>
                           <option value="DescOrder">Descendente</option>
                         </select>
-                      </div>
+                      </div> */}
                     </div>
                   </Col>
                 </Row>
