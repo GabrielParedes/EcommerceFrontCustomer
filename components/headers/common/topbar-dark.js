@@ -41,10 +41,10 @@ const TopBarDark = ({ topClass, fluid }) => {
                   <i className="fa fa-whatsapp text-white" aria-hidden="true"></i><a href="https://api.whatsapp.com/send?phone=+50259866459&text=Hola%2C%20estoy%20interesado%20en%20los%20productos%20que%20venden%20en%20la%20pagina%20de%20Algo%20Bonito.%20%0AEspero%20su%20pronta%20respuesta." target="_blank">5986 6459</a> / <a href="https://api.whatsapp.com/send?phone=+50242173533&text=Hola%2C%20estoy%20interesado%20en%20los%20productos%20que%20venden%20en%20la%20pagina%20de%20Algo%20Bonito.%20%0AEspero%20su%20pronta%20respuesta." target="_blank">4217 3533</a>
                 </li>
                 <li>
-                  <i className="fa fa-instagram text-white" aria-hidden="true"></i>Algo_bonito_502
+                  <i className="fa fa-instagram text-white" aria-hidden="true"></i><a href="https://instagram.com/algo_bonito_502?igshid=NzZhOTFlYzFmZQ==" target="_blank">Algo_bonito_502</a>
                 </li>
                 <li>
-                  <i className="fa fa-facebook text-white" aria-hidden="true"></i>Algo_bonito_502
+                  <i className="fa fa-facebook text-white" aria-hidden="true"></i><a href="https://www.facebook.com/profile.php?id=100063689971265&mibextid=LQQJ4d" target="_blank">Algo_bonito_502</a>
                 </li>
               </ul>
             </div>
